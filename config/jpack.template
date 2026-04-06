@@ -1,0 +1,5 @@
+import { Captcha } from '{{PREFIX}}lib/js/captcha.js';
+
+import '{{PREFIX}}lib/index.less';
+
+export default Captcha;

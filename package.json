@@ -1,0 +1,33 @@
+{
+  "name": "jdzcaptcha",
+  "version": "2.0.0",
+  "browser": "dist/public/js/jdzcaptcha.min.js",
+  "type": "module",
+  "jizy": "dist/",
+  "licence": "MIT",
+  "description": "JDZ Captcha is a simple and lightweight captcha solution for web applications. It is designed to be easy to implement and customize, providing a user-friendly experience while ensuring security against automated bots.",
+  "keywords": [
+    "jizy",
+    "jdz",
+    "captcha"
+  ],
+  "files": [
+    "dist/*",
+    "lib/*"
+  ],
+  "scripts": {
+    "jpack:build": "node ./cli/jpack.js --action build --name export",
+    "jpack:build-debug": "node ./cli/jpack.js --action build --name export --debug",
+    "jpack:dist": "node ./cli/jpack.js",
+    "jpack:dist-debug": "node ./cli/jpack.js --debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joffreydemetz/jizy-captcha.git"
+  },
+  "author": "Joffrey Demetz <joffrey.demetz@gmail.com> (https://joffreydemetz.com/)",
+  "devDependencies": {
+    "jizy-packer": "^2.1.44",
+    "less": "^4.5.1"
+  }
+}
