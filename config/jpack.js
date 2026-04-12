@@ -47,7 +47,11 @@ const jPackData = function () {
         // Native ones exist in lib/iconsets/{theme}/{variant}/ and will be copied to the
         // build output. Consumer-specific ones are skipped here — the consumer serves them
         // from their own path (e.g. [WEBSITE]/assets/icons/{theme}/{variant}/).
-        const iconsets = jPackConfig.get('iconsets') ?? [];
+        let iconsets = jPackConfig.get('iconsets') ?? [];
+        if (iconsets.length === 0) {
+            iconsets = [{ theme: 'streamline', variant: 'light' }];
+            LogMe.log('No iconsets specified — defaulting to streamline/light');
+        }
         jPackConfig.set('iconsets', iconsets);
 
         if (iconsets.length > 0) {
