@@ -8,31 +8,13 @@ import {
     deleteLessVariablesFile
 } from 'jizy-packer';
 
-function parseCustomArgs() {
-    const args = process.argv.slice(2);
-    let theme = null;
-    let variant = null;
-
-    for (let i = 0; i < args.length; i++) {
-        if (args[i] === '--theme' && i + 1 < args.length) {
-            theme = args[i + 1];
-            i++;
-        } else if (args[i] === '--variant' && i + 1 < args.length) {
-            variant = args[i + 1];
-            i++;
-        }
-    }
-
-    return { theme, variant };
-}
-
-function discoverIconsets(iconsPath) {
+function availableIconsets() {
+    const iconsPath = path.join(jPackConfig.get('basePath'), 'lib', 'iconsets');
     if (!fs.existsSync(iconsPath)) {
         return [];
     }
 
     const results = [];
-
     fs.readdirSync(iconsPath)
         .filter(f => fs.statSync(path.join(iconsPath, f)).isDirectory())
         .forEach(theme => {
@@ -47,23 +29,6 @@ function discoverIconsets(iconsPath) {
     return results;
 }
 
-function collectIconsets(iconsPath, action, theme, variant) {
-    let sets = discoverIconsets(iconsPath);
-
-    if (action === 'build' && theme) {
-        sets = sets.filter(s => s.theme === theme);
-        if (variant) {
-            sets = sets.filter(s => s.variant === variant);
-        }
-    }
-
-    if (sets.length === 0) {
-        console.error(`No matching iconsets found for theme="${theme}", variant="${variant}"`);
-    }
-
-    return sets;
-}
-
 const jPackData = function () {
     const lessBuildVariablesPath = path.join(jPackConfig.get('basePath'), 'lib/less/_variables.less');
 
@@ -73,24 +38,21 @@ const jPackData = function () {
         lessVariables: {
             desktopBreakpoint: '900px',
             scrollbarWidth: '17px'
-            // add your custom less variables here
-        }
+        },
+        iconsets: []
     });
 
     jPackConfig.set('onCheckConfig', () => {
-        const iconsPath = path.join(jPackConfig.get('basePath'), 'lib', 'iconsets');
-        jPackConfig.set('iconsPath', iconsPath);
-
-        const { theme, variant } = parseCustomArgs();
-        const action = jPackConfig.get('action');
-
-        const iconsets = collectIconsets(iconsPath, action, theme, variant);
+        // iconsets are theme/variant names (native or consumer-specific).
+        // Native ones exist in lib/iconsets/{theme}/{variant}/ and will be copied to the
+        // build output. Consumer-specific ones are skipped here — the consumer serves them
+        // from their own path (e.g. [WEBSITE]/assets/icons/{theme}/{variant}/).
+        const iconsets = jPackConfig.get('iconsets') ?? [];
         jPackConfig.set('iconsets', iconsets);
 
-        LogMe.log(`Iconsets to export: ${iconsets.map(s => s.theme + '/' + s.variant).join(', ')}`);
-
-        // No rollup icon imports — icons are copied directly in onPacked
-        jPackConfig.set('icons', []);
+        if (iconsets.length > 0) {
+            LogMe.log(`Iconsets declared: ${iconsets.map(s => s.theme + '/' + s.variant).join(', ')}`);
+        }
     });
 
     jPackConfig.set('onGenerateBuildJs', (code) => {
@@ -106,10 +68,10 @@ const jPackData = function () {
     jPackConfig.set('onPacked', () => {
         const targetPath = jPackConfig.get('targetPath');
         const basePath = jPackConfig.get('basePath');
-        const iconsPath = jPackConfig.get('iconsPath');
-        const iconsets = jPackConfig.get('iconsets');
+        const iconsets = jPackConfig.get('iconsets') ?? [];
         const publicPath = path.join(targetPath, 'public');
-        const assetsPath = path.join(targetPath, 'assets');
+        const assetsPath = path.join(targetPath, 'assets', 'jdzcaptcha');
+        const nativeIconsPath = path.join(basePath, 'lib', 'iconsets');
 
         // Move js/, css/ into public/
         fs.mkdirSync(publicPath, { recursive: true });
@@ -126,33 +88,33 @@ const jPackData = function () {
             }
         }
 
-        // Copy placeholder.png to assets/
+        // Always copy placeholder.png (needed by the PHP backend regardless of iconsets).
         fs.mkdirSync(assetsPath, { recursive: true });
         const placeholderSrc = path.join(basePath, 'lib', 'placeholder.png');
         if (fs.existsSync(placeholderSrc)) {
             fs.copyFileSync(placeholderSrc, path.join(assetsPath, 'placeholder.png'));
-            LogMe.log('Copied placeholder.png to assets/');
+            LogMe.log('Copied placeholder.png to assets/jdzcaptcha/');
         }
 
-        // Copy icons from lib/iconsets/ to assets/icons/ preserving theme/variant structure
-        for (const { theme, variant } of iconsets) {
-            const srcDir = path.join(iconsPath, theme, variant);
-            const destDir = path.join(assetsPath, 'icons', theme, variant);
+        // Copy native iconsets into assets/jdzcaptcha/{theme}/{variant}/ (consumer-specific
+        // iconsets are skipped — the consumer serves those from their own path).
+        const nativeSets = availableIconsets();
+        const nativeSelected = iconsets.filter(set =>
+            nativeSets.some(ok => ok.theme === set.theme && ok.variant === set.variant)
+        );
 
-            if (!fs.existsSync(srcDir)) {
-                LogMe.log(`Icon source not found: ${srcDir}`);
-                continue;
-            }
+        for (const { theme, variant } of nativeSelected) {
+            const srcDir = path.join(nativeIconsPath, theme, variant);
+            const destDir = path.join(assetsPath, theme, variant);
 
             fs.mkdirSync(destDir, { recursive: true });
-
             fs.readdirSync(srcDir)
                 .filter(file => path.extname(file).toLowerCase() === '.png')
                 .forEach(file => {
                     fs.copyFileSync(path.join(srcDir, file), path.join(destDir, file));
                 });
 
-            LogMe.log(`Copied icons: ${theme}/${variant}`);
+            LogMe.log(`Copied native iconset: ${theme}/${variant}`);
         }
 
         // Clean up generated LESS variables
