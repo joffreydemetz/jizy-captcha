@@ -1,6 +1,5 @@
 .claude/
 build/*
-dist/*
-files/
+.work/
 node_modules/
 package-lock.json
