@@ -6,6 +6,7 @@
   "jizy": "dist/",
   "license": "MIT",
   "description": "JDZ Captcha is a simple and lightweight captcha solution for web applications. It is designed to be easy to implement and customize, providing a user-friendly experience while ensuring security against automated bots.",
+  "homepage": "https://jizy.joffreydemetz.com/captcha",
   "keywords": [
     "jizy",
     "jdz",
