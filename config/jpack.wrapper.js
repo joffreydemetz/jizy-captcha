@@ -1,4 +1,3 @@
-/*! JdzCaptcha v@VERSION | MIT | @DATE | [@BUNDLE] */
 (function (global) {
     "use strict";
 
