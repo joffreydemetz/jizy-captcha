@@ -24,7 +24,10 @@
     "jpack:build": "node ./cli/jpack.js --action build --name export",
     "jpack:build-debug": "node ./cli/jpack.js --action build --name export --debug",
     "jpack:dist": "node ./cli/jpack.js",
-    "jpack:dist-debug": "node ./cli/jpack.js --debug"
+    "jpack:dist-debug": "node ./cli/jpack.js --debug",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -34,5 +37,10 @@
   "dependencies": {
     "jizy-packer": "^2.1.44",
     "less": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.9",
+    "jsdom": "^25.0.1",
+    "vitest": "^2.1.9"
   }
 }
