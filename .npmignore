@@ -1,5 +1,5 @@
-.claude/
 .work/
 build/*
 node_modules/
+test/
 package-lock.json

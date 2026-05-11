@@ -1,6 +1,5 @@
-/.claude/
 /.work/
 /build/*
-/example/
+/coverage/
 node_modules/
 package-lock.json
