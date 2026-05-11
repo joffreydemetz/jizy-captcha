@@ -15,7 +15,7 @@ npm install jdzcaptcha
 - `dist/public/js/jdzcaptcha.min.js` — client script
 - `dist/public/css/jdzcaptcha.min.css` — stylesheet
 - `dist/assets/jdzcaptcha/` — icon series and placeholder
-- `lib/` — Less sources and icon sets for custom builds
+- `lib/` — JS and Less sources and icon sets for custom builds
 - `cli/jpack.js`, `config/` — jpack build entrypoint and templates
 
 ## Usage
