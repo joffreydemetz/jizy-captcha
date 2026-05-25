@@ -6,6 +6,8 @@
     margin-left: auto;
     margin-right: auto;
     border-radius: 8px;
+    background: var(--jizy-captcha-bg);
+    border: 1px solid var(--jizy-captcha-border);
     font-family: inherit;
     text-shadow: none;
     line-height: 1;
@@ -53,12 +55,14 @@
         left: 0;
         right: 0;
         top: 35px;
+        color: var(--jizy-captcha-subtitle);
     }
 
     .jdzc-box-h {
         height: auto;
         padding: 0 10px;
         display: block;
+        border-bottom: 2px solid var(--jizy-captcha-border);
 
         span {
             padding: 6px 0;
@@ -68,6 +72,7 @@
             line-height: 14px;
             font-weight: 700;
             cursor: default;
+            color: var(--jizy-captcha-header);
 
             &::selection {
                 background: none !important;
@@ -132,6 +137,11 @@
         &:hover {
             text-decoration: underline;
         }
+
+        span,
+        a {
+            color: var(--jizy-captcha-info);
+        }
     }
 
     .jdzc-box-b {
@@ -178,16 +188,24 @@
         display: block !important;
         font-size: 9px;
         padding: 3px;
+        padding-top: 6px;
+        padding-bottom: 5px;
         cursor: default;
         text-align: center;
+        color: var(--jizy-captcha-footer);
+        border-top: 2px solid var(--jizy-captcha-border);
 
         >span a {
             text-decoration: none;
             transition: color .1s linear;
             text-align: center;
+            color: var(--jizy-captcha-footer-link);
+            text-transform: uppercase;
+            font-weight: 700;
 
             &:hover {
                 transition: color .1s linear;
+                color: var(--jizy-captcha-footer-link-hover);
             }
         }
     }
@@ -217,7 +235,7 @@
             width: 28px;
             height: 28px;
             border-radius: 100%;
-            border: 6px solid @jdz-color;
+            border: 6px solid var(--jizy-captcha-color);
             position: absolute;
             top: 13px;
             left: 15px;
@@ -231,17 +249,36 @@
 
         &:hover {
             transition: background 150ms linear;
+            background: var(--jizy-captcha-init-hover-bg);
         }
 
         &:hover .jdzc-box-circle {
             opacity: .75;
             transition: opacity .1s linear;
         }
+
+        .jdzc-box-title {
+            color: var(--jizy-captcha-init-title);
+        }
     }
 
     &.jdzc-success,
     &.jdzc-error {
         cursor: default;
+    }
+
+    &.jdzc-success {
+        .jdzc-box-checkmark svg {
+            stroke: var(--jizy-captcha-success);
+        }
+
+        .jdzc-box-title {
+            color: var(--jizy-captcha-success);
+        }
+    }
+
+    &.jdzc-error .jdzc-box-title {
+        color: var(--jizy-captcha-error);
     }
 
     &.jdzc-init .jdzc-box-title,

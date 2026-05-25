@@ -1,0 +1,44 @@
+/*
+ * Default theming exposed as CSS custom properties.
+ *
+ * Defaults at `:root` are the light-theme values, so `<div class="jdzc">`
+ * works standalone. Apply `.jdzc-theme-dark` on the captcha root to switch
+ * to the dark variant. Apply `.jdzc-theme-light` is a no-op (kept for
+ * backward-compatibility with existing consumer markup).
+ *
+ * Override at `:root` from a consumer stylesheet loaded AFTER this CSS:
+ *
+ *   :root {
+ *     --jizy-captcha-color: #00bcd4;
+ *     --jizy-captcha-success: #2ecc71;
+ *   }
+ */
+:root {
+    --jizy-captcha-color: #11243c;
+    --jizy-captcha-color-light: #8e8a94;
+    --jizy-captcha-bg: #fafafa;
+    --jizy-captcha-border: #d8d8d8;
+    --jizy-captcha-subtitle: #9e9e9e;
+    --jizy-captcha-header: #1d1d1d;
+    --jizy-captcha-footer: #a7a7a7;
+    --jizy-captcha-footer-link: #448aff;
+    --jizy-captcha-footer-link-hover: #74a8ff;
+    --jizy-captcha-info: #afafaf;
+    --jizy-captcha-init-hover-bg: #f1f1f1;
+    --jizy-captcha-init-title: #464646;
+    --jizy-captcha-success: #5bd25b;
+    --jizy-captcha-error: #ef5858;
+}
+
+.jdzc.jdzc-theme-dark {
+    --jizy-captcha-bg: #4c4c4c;
+    --jizy-captcha-border: #404040;
+    --jizy-captcha-subtitle: #b1b1b1;
+    --jizy-captcha-header: #dadada;
+    --jizy-captcha-footer-link: #fff;
+    --jizy-captcha-footer-link-hover: #f0f0f0;
+    --jizy-captcha-info: #b1b1b1;
+    --jizy-captcha-init-hover-bg: #454545;
+    --jizy-captcha-init-title: #dadada;
+    --jizy-captcha-success: #93d293;
+}

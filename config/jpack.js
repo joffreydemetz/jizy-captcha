@@ -3,9 +3,7 @@ import path from 'path';
 
 import {
     LogMe,
-    jPackConfig,
-    generateLessVariablesFromConfig,
-    deleteLessVariablesFile
+    jPackConfig
 } from 'jizy-packer';
 
 function availableIconsets() {
@@ -30,15 +28,9 @@ function availableIconsets() {
 }
 
 const jPackData = function () {
-    const lessBuildVariablesPath = path.join(jPackConfig.get('basePath'), 'lib/less/_variables.less');
-
     jPackConfig.sets({
         name: 'JdzCaptcha',
         alias: 'jdzcaptcha',
-        lessVariables: {
-            desktopBreakpoint: '900px',
-            scrollbarWidth: '17px'
-        },
         iconsets: []
     });
 
@@ -59,14 +51,7 @@ const jPackData = function () {
         }
     });
 
-    jPackConfig.set('onGenerateBuildJs', (code) => {
-        LogMe.log('Build lib/less/_variables.less');
-        const lessVariables = jPackConfig.get('lessVariables') ?? {};
-        const lessOriginalVariablesPath = path.join(jPackConfig.get('basePath'), 'lib/less/variables.less');
-        generateLessVariablesFromConfig(lessOriginalVariablesPath, lessBuildVariablesPath, lessVariables);
-        return code;
-    });
-
+    jPackConfig.set('onGenerateBuildJs', (code) => code);
     jPackConfig.set('onGenerateWrappedJs', (wrapped) => wrapped);
 
     jPackConfig.set('onPacked', () => {
@@ -120,9 +105,6 @@ const jPackData = function () {
 
             LogMe.log(`Copied native iconset: ${theme}/${variant}`);
         }
-
-        // Clean up generated LESS variables
-        deleteLessVariablesFile(lessBuildVariablesPath);
     });
 };
 
