@@ -242,6 +242,30 @@ describe('Widget — events', () => {
         expect(handler).toHaveBeenCalledTimes(1);
         expect(handler.mock.calls[0][0].detail).toEqual({ captchaId: w.id });
     });
+
+    it('keeps the success state after a correct selection (no auto-reset)', () => {
+        vi.useFakeTimers();
+        try {
+            const host = buildHostElement();
+            const opts = buildOptions({ security: { enableInitialMessage: false, loadingAnimationDelay: 0 } });
+            const w = new Widget(host, opts);
+            w.$iconHolder = host.querySelector(`.${CSS.boxB}`);
+            const success = vi.fn();
+            host.addEventListener('jdzc.success', success);
+            const resetSpy = vi.spyOn(w, 'reset');
+
+            w.showCompletionMessage();
+            vi.advanceTimersByTime(opts.security.selectionResetDelay * 2);
+
+            // A reset regenerates the challenge server-side, which clears the
+            // completed flag the form submission is validated against.
+            expect(success).toHaveBeenCalledTimes(1);
+            expect(resetSpy).not.toHaveBeenCalled();
+            expect(host.classList.contains(CSS.success)).toBe(true);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });
 
 describe('Widget — registerSelectionEvents / unregisterSelectionEvents', () => {
