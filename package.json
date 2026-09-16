@@ -1,6 +1,6 @@
 {
   "name": "jdzcaptcha",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "browser": "dist/public/js/jdzcaptcha.min.js",
   "type": "module",
   "author": "Joffrey Demetz <joffrey.demetz@gmail.com> (https://joffreydemetz.com/)",
