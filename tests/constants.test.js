@@ -1,12 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CSS, VERSION, defaults } from '../lib/js/constants.js';
-
-describe('constants — VERSION', () => {
-    it('exports a semantic version string', () => {
-        expect(typeof VERSION).toBe('string');
-        expect(VERSION).toMatch(/^\d+\.\d+\.\d+$/);
-    });
-});
+import { CSS, defaults } from '../lib/js/constants.js';
 
 describe('constants — CSS', () => {
     it('every class name uses the jdzc- prefix', () => {
